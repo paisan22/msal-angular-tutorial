@@ -44,6 +44,12 @@ export class AppComponent implements OnInit {
     }
   }
 
+  logout() {
+    this.authService.logoutRedirect({
+      postLogoutRedirectUri: 'http://localhost:4200'
+    })
+  }
+
   setLoginDisplay() {
     this.loginDisplay = this.authService.instance.getAllAccounts().length > 0;
   }
