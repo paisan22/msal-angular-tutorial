@@ -14,7 +14,7 @@ import { ProfileComponent } from './profile/profile.component';
 
 import { MsalGuard, MsalInterceptor, MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -39,6 +39,7 @@ const redirectURI = 'http://localhost:4200'
     MatButtonModule,
     MatToolbarModule,
     MatListModule,
+    HttpClientModule,
     MsalModule.forRoot(new PublicClientApplication({
       auth: {
         clientId: clientID, // app client id

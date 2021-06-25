@@ -16,19 +16,19 @@ type ProfileType = {
   styleUrls: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
   profile!: ProfileType;
 
   constructor(private http: HttpClient) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.getProfile();
   }
+
   getProfile() {
     this.http.get(GRAPH_ENDPOINT)
       .subscribe(profile => {
         this.profile = profile;
-      })
+      });
   }
 
 }
