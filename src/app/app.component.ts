@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { MsalService } from '@azure/msal-angular';
+import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
+import { InteractionStatus } from '@azure/msal-browser';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
@@ -11,10 +14,23 @@ export class AppComponent implements OnInit {
   isIframe = false;
   loginDisplay = false;
 
-  constructor(private authService: MsalService) {}
+  private readonly _destroying$ = new Subject<void>();
+
+  constructor(private authService: MsalService, private broadcastService: MsalBroadcastService) {}
 
   ngOnInit() {
     this.isIframe = window !== window.parent && !window.opener;
+
+    // subscribe to the inProgress$ observable to check if interaction is complete and an
+    // account is singed in before rendering UI.
+    this.broadcastService.inProgress$
+      .pipe(
+        filter((status: InteractionStatus) => status === InteractionStatus.None),
+        takeUntil(this._destroying$)
+      )
+      .subscribe(() => {
+        this.setLoginDisplay()
+      })
   }
 
   login() {
@@ -23,5 +39,10 @@ export class AppComponent implements OnInit {
 
   setLoginDisplay() {
     this.loginDisplay = this.authService.instance.getAllAccounts().length > 0;
+  }
+
+  ngOnDestroy(): void {
+    this._destroying$.next(undefined);
+    this._destroying$.complete();
   }
 }
