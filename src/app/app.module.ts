@@ -12,7 +12,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 
-import { MsalModule } from '@azure/msal-angular';
+import { MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
 import { PublicClientApplication } from '@azure/msal-browser';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
@@ -51,6 +51,6 @@ const redirectURI = 'http://localhost:4200'
     }), null, null)
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent, MsalRedirectComponent] // MsalRedirectComponent bootstrapped
 })
 export class AppModule { }
