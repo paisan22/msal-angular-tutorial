@@ -12,8 +12,8 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ProfileComponent } from './profile/profile.component';
 
-import { MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
-import { PublicClientApplication } from '@azure/msal-browser';
+import { MsalGuard, MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
+import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -48,9 +48,16 @@ const redirectURI = 'http://localhost:4200'
         cacheLocation: 'localStorage',
         storeAuthStateInCookie: isIE, // true if IE 11
       }
-    }), null, null)
+    }), {
+      interactionType: InteractionType.Redirect,
+      authRequest: {
+        scopes: ['user.read']
+      }
+    }, null)
   ],
-  providers: [],
+  providers: [
+    MsalGuard
+  ],
   bootstrap: [AppComponent, MsalRedirectComponent] // MsalRedirectComponent bootstrapped
 })
 export class AppModule { }

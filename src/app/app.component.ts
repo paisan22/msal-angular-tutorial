@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MsalBroadcastService, MsalService } from '@azure/msal-angular';
-import { InteractionStatus } from '@azure/msal-browser';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MsalBroadcastService, MsalGuardConfiguration, MsalService, MSAL_GUARD_CONFIG } from '@azure/msal-angular';
+import { InteractionStatus, RedirectRequest } from '@azure/msal-browser';
 import { Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
@@ -16,7 +16,10 @@ export class AppComponent implements OnInit {
 
   private readonly _destroying$ = new Subject<void>();
 
-  constructor(private authService: MsalService, private broadcastService: MsalBroadcastService) {}
+  constructor(
+    private authService: MsalService, 
+    private broadcastService: MsalBroadcastService,
+    @Inject(MSAL_GUARD_CONFIG) private msalGuardConfig: MsalGuardConfiguration) {}
 
   ngOnInit() {
     this.isIframe = window !== window.parent && !window.opener;
@@ -34,7 +37,11 @@ export class AppComponent implements OnInit {
   }
 
   login() {
-    this.authService.loginRedirect();
+    if(this.msalGuardConfig.authRequest) {
+      this.authService.loginRedirect({...this.msalGuardConfig.authRequest} as RedirectRequest);
+    } else {
+      this.authService.loginRedirect();
+    }
   }
 
   setLoginDisplay() {
