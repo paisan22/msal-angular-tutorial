@@ -15,6 +15,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { MsalGuard, MsalInterceptor, MsalModule, MsalRedirectComponent } from '@azure/msal-angular';
 import { InteractionType, PublicClientApplication } from '@azure/msal-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { WebapiComponent } from './webapi/webapi.component';
 
 const isIE = window.navigator.userAgent.indexOf('MSIE ') > -1 || window.navigator.userAgent.indexOf('Trident/') > -1;
 
@@ -30,7 +31,8 @@ const redirectURI = 'http://localhost:4200'
   declarations: [
     AppComponent,
     HomeComponent,
-    ProfileComponent
+    ProfileComponent,
+    WebapiComponent
   ],
   imports: [
     BrowserModule,
@@ -59,7 +61,8 @@ const redirectURI = 'http://localhost:4200'
       // add the scopes to be returned in the access token, for each protected resource
       interactionType: InteractionType.Redirect,
       protectedResourceMap: new Map([
-        ['https://graph.microsoft.com/v1.0/me', ['user.read']]
+        ['https://graph.microsoft.com/v1.0/me', ['user.read']],
+        ['https://localhost:5001/WeatherForecast', ['api://2280b737-c16a-49f1-8fd1-8149e7b49864/API.Call']]
       ])
     })
   ],

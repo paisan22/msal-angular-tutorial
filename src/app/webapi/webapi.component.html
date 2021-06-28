@@ -1,0 +1,11 @@
+<p>webapi works!</p>
+
+<button mat-raised-button (click)="callAPI()">call API</button>
+
+<div *ngFor="let result of results">
+    <hr>
+    <p><b>date:</b> {{ result.date }}</p>
+    <p><b>summary:</b> {{ result.summary }}</p>
+    <p><b>temperature C:</b> {{ result.temperatureC }}</p>
+    <p><b>temperature F:</b> {{ result.temperatureF }}</p>
+</div>
